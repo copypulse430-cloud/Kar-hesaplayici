@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ücretsiz Kâr Hesaplayıcı</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  background: #f3f5f8;
+  color: #172033;
+}
+main {
+  max-width: 440px;
+  margin: 45px auto;
+  background: white;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 5px 25px #0000000d;
+}
+h1 { font-size: 25px; }
+p { color: #687386; line-height: 1.5; }
+label { display: block; margin-top: 18px; font-weight: bold; }
+input {
+  width: 100%;
+  padding: 14px;
+  margin-top: 8px;
+  border: 1px solid #d8deea;
+  border-radius: 9px;
+  font-size: 16px;
+}
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 24px;
+  border: 0;
+  border-radius: 9px;
+  background: #2459d3;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+#result {
+  display: none;
+  margin-top: 22px;
+  padding: 18px;
+  background: #edf7ef;
+  border-radius: 12px;
+}
+.price { font-size: 30px; font-weight: bold; color: #16753b; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ücretsiz Kâr Hesaplayıcı</h1>
+  <p>Ürününün maliyetini ve hedeflediğin kârı gir. Önerilen satış fiyatını hemen hesapla.</p>
+
+  <label>Ürün maliyeti (TL)</label>
+  <input id="cost" type="number" min="0" step="0.01" placeholder="Örn. 100">
+
+  <label>Ek masraflar (TL)</label>
+  <input id="expense" type="number" min="0" step="0.01" placeholder="Örn. 20">
+
+  <label>Hedeflenen kâr (TL)</label>
+  <input id="profit" type="number" min="0" step="0.01" placeholder="Örn. 50">
+
+  <button onclick="calculate()">Satış fiyatını hesapla</button>
+
+  <section id="result" aria-live="polite">
+    <p>Önerilen satış fiyatı</p>
+    <div class="price" id="price"></div>
+    <p id="detail"></p>
+  </section>
+</main>
+
+<script>
+function calculate() {
+  const cost = Number(document.getElementById("cost").value);
+  const expense = Number(document.getElementById("expense").value);
+  const profit = Number(document.getElementById("profit").value);
+
+  if (![cost, expense, profit].every(Number.isFinite) ||
+      [cost, expense, profit].some(v => v < 0) ||
+      !["cost","expense","profit"].every(id =>
+        document.getElementById(id).value.trim() !== "")) {
+    alert("Lütfen tüm alanlara sıfır veya daha büyük geçerli değerler gir.");
+    return;
+  }
+
+  const total = cost + expense + profit;
+
+  document.getElementById("price").textContent =
+    total.toLocaleString("tr-TR", {
+      style: "currency",
+      currency: "TRY"
+    });
+
+  document.getElementById("detail").textContent =
+    "Toplam maliyet: " + (cost + expense).toLocaleString("tr-TR") +
+    " TL | Hedeflenen kâr: " + profit.toLocaleString("tr-TR") + " TL";
+
+  document.getElementById("result").style.display = "block";
+}
+</script>
+</body>
+</html>
